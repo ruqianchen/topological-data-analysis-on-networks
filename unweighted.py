@@ -209,7 +209,7 @@ for i in range(n):
 # pyformat:  https://pyformat.info/
 # http://stackoverflow.com/questions/8234445/python-format-output-string-right-alignment
 for i in range(n):
-		#print('{:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>20} {:>20} {:>20} {:>20}'.format(str(i), str(arrV[i].componentSize),str(arrV[i].mergeTime), str(arrV[i].rep), str(arrV[i].degree),str(arrV[i].death) , str(arrV[i].merge),   str(arrV[i].branchSize),str(arrV[i].branchTime), str(arrV[i].uniqueBranchSize), str(arrV[i].uniqueBranchTime)  ))
+        #print('{:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>20} {:>20} {:>20} {:>20}'.format(str(i), str(arrV[i].componentSize),str(arrV[i].mergeTime), str(arrV[i].rep), str(arrV[i].degree),str(arrV[i].death) , str(arrV[i].merge),   str(arrV[i].branchSize),str(arrV[i].branchTime), str(arrV[i].uniqueBranchSize), str(arrV[i].uniqueBranchTime)  ))
         sys.stdout.write('{:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>30} {:>30}'.format(str(i), str(arrV[i].componentSize),str(arrV[i].mergeTime), str(arrV[i].rep), str(arrV[i].degree),str(arrV[i].death) , str(arrV[i].merge),   str(arrV[i].uniqueBranchSize), str(arrV[i].uniqueBranchTime)))
     	#print('{:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>20} {:>20}'.format(str(i), str(arrV[i].componentSize),str(arrV[i].mergeTime), str(arrV[i].rep), str(arrV[i].degree),str(arrV[i].death) , str(arrV[i].merge),   str(arrV[i].uniqueBranchSize), str(arrV[i].uniqueBranchTime)  ))
         #sys.stdout.write('{:>5} {:>5} {:>5} {:>5} {:>5} {:>5} {:>5}'.format(str(i), str(arrV[i].componentSize),str(arrV[i].mergeTime), str(arrV[i].rep), str(arrV[i].degree),str(arrV[i].death) , str(arrV[i].merge)))
@@ -217,8 +217,44 @@ for i in range(n):
 
 
 
+birthArr = []
+deathArr = []
+for i in range(n):
+    if arrV[i].degree != get_last(arrV[i].uniqueBranchTime):
+        birthArr.append(arrV[i].degree)
+        deathArr.append(get_last(arrV[i].uniqueBranchTime))
 
 
 
+scratch = sorted(zip(birthArr,deathArr))
+newB = [int(i[0]) for i in scratch]
+newD= [int(i[1]) for i in scratch]
+# len(newB)
+
+# reference: draw graphs
+# http://stackoverflow.com/questions/6834483/how-do-you-create-line-segments-between-two-points
+# http://stackoverflow.com/questions/21352580/matplotlib-plotting-numerous-disconnected-line-segments-with-different-colors
+#lines = [[(0, 1), (1, 1)], [(2, 3), (3, 3)], [(1, 2), (1, 3)], [[3,4],[5,6]]]
+
+segs = np.zeros((len(newB),2,2),int)
+segs[:,0,1] = range(len(newD))
+segs[:,1,0] = newB #birth
+segs[:,1,1] = range(len(newD))
+segs[:,0,0] = newD #death
+
+#  segs
+# [[[000 D0, 001 B0],[010 B0, 011 B0]],
+#  [[100 D1, 101 B1],[110 B1, 111 B1]],
+#  [[200 D2, 201 B2],[210 B2, 211 B2]]]
+name = 'graph'
+c = np.array([(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1)])
+lc = mc.LineCollection(segs, colors=c, linewidths=2)
+fig, ax = pl.subplots()
+ax.add_collection(lc)
+ax.autoscale()
+ax.margins(0.1)
+plt.title(name+'Persistence')
+pl.savefig(name+'P.png', bbox_inches='tight')
+#plt.show()
 
 
