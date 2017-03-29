@@ -1,12 +1,10 @@
 # reference
 # http://stackoverflow.com/questions/17242828/python-subprocess-and-running-a-bash-script-with-multiple-arguments
+# http://stackoverflow.com/questions/9347004/how-do-i-redirect-stdout-to-a-file-when-using-subprocess-call-in-python
 
 # README
-# This file runs randomGraphGenerator.py with n fixed and with every p in the input p array.
-#
-# Modification: 
-## can modify to take an array of n as well. 
-## can modify to auto generate p under some different distribution.
+# This file runs unweightedHBD.py once with an input starting as randA+foo
+# For a such input, it generates randB+foo.csv
 
 
 import subprocess
